@@ -2,8 +2,10 @@ package com.davidout.Challenges.Events;
 
 import com.davidout.Challenges.Challenge;
 import com.davidout.Challenges.ChallengePlayer;
+import com.davidout.Challenges.Types.ChallengeType;
 import com.davidout.Challenges.Types.DamageCause;
 import com.davidout.Main;
+import com.davidout.Utils.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -119,8 +121,8 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
 
         if(damager instanceof Player && challenge.getChallengeType().equals(ChallengeType.DEATH_SWAP)) {
             e.setCancelled(true);
-
-            return;
+            Player dm = (Player) damager;
+            dm.sendMessage(Chat.format("&cYou can't damage other players in death swap."));
         }
 
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
