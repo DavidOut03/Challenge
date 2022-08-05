@@ -117,6 +117,12 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
         if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) == null) return;
         Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(cp.getChallengeID());
 
+        if(damager instanceof Player && challenge.getChallengeType().equals(ChallengeType.DEATH_SWAP)) {
+            e.setCancelled(true);
+
+            return;
+        }
+
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
             if(damager.getType().equals(EntityType.ZOMBIE)) {
                 Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Zombie"), e.getDamage(), damager));
