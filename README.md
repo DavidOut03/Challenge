@@ -1,7 +1,5 @@
 ## Challange plugin made by Snapje:
 
-- **Website**: [davidout.com](https://www.davidout.com/) 
-
 #### A spigot plugin wich makes it possible to play dream's challenges.
 
 ## Challlenges:
