@@ -32,7 +32,7 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            commandSender.sendMessage("&7Use: /challenge [start/stop] [challengetype]");
+            commandSender.sendMessage(Chat.format("&7Use: /challenge [start/stop] [challengetype]"));
             return false;
         }
 

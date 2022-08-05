@@ -92,7 +92,7 @@ public class Main extends JavaPlugin {
         DamageCause.registerCause("Lightning", "Get killed by a lightning bold.", EntityDamageEvent.DamageCause.LIGHTNING);
 //        DamageCause.registerCause("Hunger", "Starve youreself to death.", EntityDamageEvent.DamageCause.STARVATION);
         DamageCause.registerCause("Sufficate", "Sufficate youreself to death.", EntityDamageEvent.DamageCause.SUFFOCATION);
-        DamageCause.registerCause("Void", "Get youreself killed by jumping into the void.", EntityDamageEvent.DamageCause.VOID);
+//        DamageCause.registerCause("Void", "Get youreself killed by jumping into the void.", EntityDamageEvent.DamageCause.VOID);
 
 //        DamageCause.registerCause("", "", EntityDamageEvent.DamageCause.);
     }
