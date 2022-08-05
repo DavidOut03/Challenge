@@ -4,6 +4,7 @@ import com.davidout.Challenges.ChallengePlayer;
 import com.davidout.Challenges.Types.DamageCause;
 import com.davidout.Challenges.Objective;
 import com.davidout.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -11,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Array;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,36 +98,43 @@ public class Functions {
     }
 
     public static Material getRandomBlock(int round) {
-        String[] exceptionsForRounds = {"NETHER:3", "QUARTS:3", "SOUL_SAND:3"};
+        String[] exceptionsForRounds = {"DISPENSER:2", "DROPPER:2",
+                                        "OBSERVER","CRYING_OBSIDIAN:3", "DEEPSLATE:3", "DIAMOND_ORE:3", "MOSSY:3",
+                                        "DIAMOND:4", "GOLD_BLOCK:4", "NETHER:4", "NYLIUM:4", "QUARTS:4", "SOIL:4", "SOUL_SAND:4", "AMETHYST:4", "SPAWNER:4",
+                                        "ANCIENT_DEBRIS:5", "SPONGE:5", "SEA_LANTERN:5", "PRISMARINE:5",
+                                        "CAKE:6",
+                                        "ENCHANTMENT_TABLE:7"};
 
-            ArrayList<Material> blocks = Main.getInstance().getBlocks();
-            Random random = new Random();
-            Material mat = blocks.get(random.nextInt(blocks.size()));
-            String formatMat = mat.toString().toLowerCase().replace("_", " ");
+        ArrayList<Material> blocks = Main.getInstance().getBlocks();
+        ArrayList<Material> filteredList = new ArrayList<>();
 
-            boolean containsException = true;
-            while (containsException) {
-                for(String s : exceptionsForRounds) {
-                    String material = s.split(":")[0];
-                    int r = Integer.parseInt(s.split(":")[1]);
+        if(blocks.isEmpty()) {
+            Bukkit.getConsoleSender().sendMessage(Chat.format("&cBlock list is empty."));
+        }
 
-                    if(mat.toString().toUpperCase().contains(s.toUpperCase())) {
-                        mat = blocks.get(random.nextInt(blocks.size()));
-                        break;
-                    }
 
-                    if(round > r) {
-                        mat = blocks.get(random.nextInt(blocks.size()));
-                        break;
-                    }
+        for (Material mat : blocks) {
+            for(String s : exceptionsForRounds) {
+                String cm = s.split(":")[0];
+                int r = Integer.parseInt(s.split(":")[1]);
 
-                    containsException = false;
-                    break;
+                if(mat.toString().toUpperCase().contains(cm.toUpperCase()) && r > round) {
+//                    Bukkit.getConsoleSender().sendMessage(Chat.format("&cCurrent block is not allowed for round. Block: " + mat.toString() + " currentRound: " + round + " keyWord: " + cm + " minRound: " + r + "."));
+                    continue;
                 }
+                filteredList.add(mat);
+            }
+        }
+
+
+            if(filteredList.isEmpty() || filteredList.size() <= 1) {
+                Bukkit.getConsoleSender().sendMessage(Chat.format("&cBlock list is empty size: " + filteredList.size() + "."));
+                return null;
             }
 
-           if(mat == null) return blocks.get(random.nextInt(blocks.size()));
-        return mat;
+
+            Random random = new Random();
+        return filteredList.get(random.nextInt(filteredList.size()));
     }
 
 

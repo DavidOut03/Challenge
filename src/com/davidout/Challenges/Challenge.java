@@ -90,6 +90,7 @@ public class Challenge {
 
                 for(ChallengePlayer p : getPlayingPlayers()) {
                     p.getPlayer().sendTitle(Chat.format("&a" + ChallengeType.formatChallenge(type)), Chat.format("Starting in " + time + " seconds."));
+                    p.getPlayer().setBedSpawnLocation(getSpawnPoint());
                 }
 
                 time--;

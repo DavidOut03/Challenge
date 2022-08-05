@@ -71,7 +71,13 @@ public class ChallengePlayerDeathEvent extends Event implements Cancellable, Lis
         Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(e.getChallengePlayer().getChallengeID());
         if(challenge == null) return;
         e.getPlayer().setHealth(20);
-        e.getPlayer().teleport(challenge.getSpawnPoint());
+
+        if(e.getPlayer().getBedSpawnLocation() == null) {
+            e.getPlayer().teleport(challenge.getSpawnPoint());
+        } else {
+            e.getPlayer().teleport(e.getPlayer().getBedSpawnLocation());
+        }
+
 
         challenge.broadCastToAll("&c" + e.getPlayer().getName() + " died.");
 

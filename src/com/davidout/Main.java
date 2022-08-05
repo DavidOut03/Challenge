@@ -7,6 +7,7 @@ import com.davidout.Challenges.Events.ChallengePlayerDeathEvent;
 import com.davidout.Challenges.Events.ObjectiveCompleteEvent;
 import com.davidout.Challenges.Types.DamageCause;
 import com.davidout.Scoreboard.ScoreboardManager;
+import com.davidout.Utils.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -98,16 +99,18 @@ public class Main extends JavaPlugin {
     }
 
     public void saveBlocks() {
-        File file = new File(this.getDataFolder(), "blocks.yml");
+        File file = new File(getDataFolder(), "blocks.yml");
         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
 
         // filters
-        String[] exceptions = {"SLAB", "TERRACOTTA", "STAIRS", "ENDER_CHEST", "PURPUR", "CHORUS", "SPONGE", "COPPER", "EMERALD", "AMETHYST", "SLIME", "HONEY",
-                               "SHULKUR", "MOSSY", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "PRISMARINE", "BANNER", "END", "BOX", "MUSHROOM", "MYCEL"};
+        String[] exceptions = {"WALL", "TERRACOTTA", "STAIRS", "ENDER_CHEST", "PURPUR", "CHORUS", "SPONGE", "COPPER", "EMERALD", "AMETHYST", "SLIME", "HONEY",
+                               "SHULKUR", "MOSSY_STONE_BRICK", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "BANNER", "END", "BOX", "MUSHROOM",
+                                "MYCEL", "SIGN", "COMMAND", "STRUCTURE_BLOCK", "CORAL", "KELP", "BURNING"};
+
 
         ArrayList<String> blocks = new ArrayList<>();
         for(Material mat : Material.values()) {
-            if(!mat.isBlock() || !mat.isSolid()) continue;
+            if(!mat.isBlock()) continue;
             boolean containsException = false;
 
             for(String exception: exceptions) {
@@ -120,29 +123,30 @@ public class Main extends JavaPlugin {
             blocks.add(mat.toString().toUpperCase());
         }
 
-        if(!file.exists()) {
+        if(file.exists()) return;
             try {
                 yaml.set("blocks", blocks);
                 yaml.save(file);
-            } catch (Exception ex) {}
+            } catch (Exception ignored) {}
 
-        }
     }
 
     public ArrayList<Material> getBlocks() {
-        File file = new File(this.getDataFolder(), "blocks.yml");
+        File file = new File(getDataFolder(), "blocks.yml");
         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+
+        if (!file.exists() || yaml.get("blocks") == null || yaml.getStringList("blocks").isEmpty()) {
+            Bukkit.getConsoleSender().sendMessage(Chat.format("&cBlocks couldn't be loaded."));
+            return new ArrayList<>();
+        }
+
         ArrayList<Material> blocks = new ArrayList<>();
-
-        if(file.exists()) {
-            if(yaml.getConfigurationSection("blocks").getKeys(false) == null) return blocks;
-
-            for(String key : yaml.getConfigurationSection("blocks").getKeys(false)) {
+            for(String key : yaml.getStringList("blocks")) {
                 Material mat = Material.valueOf(key);
                 if(!mat.isBlock()) continue;
                 blocks.add(mat);
             }
-        }
+
 
         return blocks;
     }
