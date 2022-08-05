@@ -75,7 +75,7 @@ public class Functions {
     }
 
     public static Material getRandomMaterial() {
-        String[] exceptions = {"BARRIER", "AIR", "BEDROCK", "SHULKUR", "TERRACOTTA"};
+        String[] exceptions = {"BARRIER", "AIR", "BEDROCK", "SHULKUR", "TERRACOTTA", "COMMAND", "STRUCTURE"};
 
         ArrayList<Material> materials = new ArrayList<>();
         for(Material mat : Material.values()) {

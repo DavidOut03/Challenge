@@ -5,6 +5,7 @@ import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import com.davidout.Utils.Functions;
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -125,6 +126,32 @@ public class Challenge {
             for(ChallengePlayer cp : getPlayingPlayers()) {
                 cp.setObjective(new Objective(cp.getPlayer(), "Kill Enderdragon"));
             }
+
+            this.scheduler = new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    seconds--;
+
+                    if(seconds == 10 || seconds == 20) {
+                        broadCastToPlayers(Chat.format("&cAll dropped items are going to be deleted from your world in " + seconds + " seconds."));
+                    }
+
+
+                    if(seconds <= 0) {
+                        seconds = 300;
+
+                        for(ChallengePlayer cp : getPlayingPlayers()) {
+                            if(cp.getPlayer().getWorld().getEntities().isEmpty() || cp.getPlayer().getWorld().getEntities().size() <= 40) continue;
+                            cp.getPlayer().getWorld().getEntities().forEach(entity -> {
+                                if(!entity.getType().equals(EntityType.DROPPED_ITEM)) return;
+                                entity.remove();
+                                cp.sendMessage(Chat.format("&cRemoved all dropped items in the world to decrease lag."));
+                            });
+                        }
+                    }
+                }
+            }.runTaskTimer(Main.getInstance(), 0L, 20L);
         }
     }
 
