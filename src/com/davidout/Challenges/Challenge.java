@@ -143,10 +143,8 @@ public class Challenge {
             if(type.equals(ChallengeType.BLOCK_SHUFFLE)) {
                 ArrayList<Material> blocks = Main.getInstance().getBlocks();
                 for(ChallengePlayer player : getPlayingPlayers()) {
-                    Random random = new Random();
-                    Material mat = blocks.get(random.nextInt(blocks.size()));
+                    Material mat = Functions.getRandomBlock(round);
                     String formatMat = mat.toString().toLowerCase().replace("_", " ");
-                    if(mat == null) return;
                     player.setObjective(new Objective(player.getPlayer(), formatMat));
                     player.sendMessage("&aYoure new objective is: to stand on a " + formatMat + " block.");
                 }

@@ -103,7 +103,7 @@ public class Main extends JavaPlugin {
 
         // filters
         String[] exceptions = {"SLAB", "TERRACOTTA", "STAIRS", "ENDER_CHEST", "PURPUR", "CHORUS", "SPONGE", "COPPER", "EMERALD", "AMETHYST", "SLIME", "HONEY",
-                               "SHULKUR", "MOSSY", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "PRISMARINE", "BANNER", "END"};
+                               "SHULKUR", "MOSSY", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "PRISMARINE", "BANNER", "END", "BOX", "MUSHROOM", "MYCEL"};
 
         ArrayList<String> blocks = new ArrayList<>();
         for(Material mat : Material.values()) {

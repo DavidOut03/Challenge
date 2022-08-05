@@ -95,6 +95,39 @@ public class Functions {
             return mat;
     }
 
+    public static Material getRandomBlock(int round) {
+        String[] exceptionsForRounds = {"NETHER:3", "QUARTS:3", "SOUL_SAND:3"};
+
+            ArrayList<Material> blocks = Main.getInstance().getBlocks();
+            Random random = new Random();
+            Material mat = blocks.get(random.nextInt(blocks.size()));
+            String formatMat = mat.toString().toLowerCase().replace("_", " ");
+
+            boolean containsException = true;
+            while (containsException) {
+                for(String s : exceptionsForRounds) {
+                    String material = s.split(":")[0];
+                    int r = Integer.parseInt(s.split(":")[1]);
+
+                    if(mat.toString().toUpperCase().contains(s.toUpperCase())) {
+                        mat = blocks.get(random.nextInt(blocks.size()));
+                        break;
+                    }
+
+                    if(round > r) {
+                        mat = blocks.get(random.nextInt(blocks.size()));
+                        break;
+                    }
+
+                    containsException = false;
+                    break;
+                }
+            }
+
+           if(mat == null) return blocks.get(random.nextInt(blocks.size()));
+        return mat;
+    }
+
 
 
 
