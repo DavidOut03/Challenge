@@ -9,8 +9,8 @@
 - Random Item: Every block you break or mob you kill will drop a random item and a random amount the objective is to kill the enderdragon.
 
 ## Commands:
-- ##### `/godkit start [challenge]`: Start a challenge in the players current world.
-- ##### `/godkit stop`: Stop the challenge in the current world.
+- ##### `/challenge start [challenge]`: Start a challenge in the players current world.
+- ##### `/challenge stop`: Stop the challenge in the current world.
 
 If you find any bugs please contact me!
 
