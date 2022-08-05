@@ -1,8 +1,0 @@
-name: Challenge
-main: com.davidout.Main
-author: David Out
-version: 1.0
-description: An challenge plugin based of dreams challenges.
-commands:
-  challenge:
-    description: Start a new challenge in the world.
