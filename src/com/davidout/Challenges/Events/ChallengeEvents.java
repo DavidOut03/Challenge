@@ -63,28 +63,28 @@ public class ChallengeEvents implements Listener {
         Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(e.getBlock().getWorld());
 
         if(challenge.getChallengeType().equals(ChallengeType.RANDOM_ITEM)) {
-            Material mat;
+            e.setDropItems(false);
+            e.getBlock().getDrops().clear();
+            e.getBlock().getDrops().removeAll(e.getBlock().getDrops());
 
+            Material mat;
             if(blocksMaterials.get(e.getBlock().getType()) == null) {
                 mat = Functions.getRandomMaterial();
-                while (used.contains(mat)) {
-                    mat = Functions.getRandomMaterial();
+
+                if(used.contains(mat)) {
+                    while (used.contains(mat)) {
+                        mat = Functions.getRandomMaterial();
+                    }
                 }
 
-                if(used.contains(mat)) return;
                 used.add(mat);
                 blocksMaterials.put(e.getBlock().getType(), mat);
             } else {
                 mat = blocksMaterials.get(e.getBlock().getType());
             }
 
-
-            e.setDropItems(false);
-            e.getBlock().getDrops().clear();
-            e.getBlock().getDrops().removeAll(e.getBlock().getDrops());
-
             Random random = new Random();
-            if(mat.isAir() || mat.equals(Material.AIR) || mat.toString().equalsIgnoreCase("AIR")) return;
+            if(mat == null) return;
             Functions.dropItem(new ItemStack(mat, random.nextInt(120)), e.getBlock().getLocation());
         }
     }
@@ -110,27 +110,27 @@ public class ChallengeEvents implements Listener {
 
         if(e.getDrops().isEmpty()) return;
         if(challenge.getChallengeType().equals(ChallengeType.RANDOM_ITEM)) {
-            Material mat;
+            e.getDrops().clear();
+            e.getDrops().removeAll(e.getDrops());
 
-            if(entityMaterials.get(e.getEntity().getType()) == null) {
+            Material mat;
+            if(entityMaterials.get(e.getEntityType()) == null) {
                 mat = Functions.getRandomMaterial();
-                while (used.contains(mat) || mat.isAir()) {
-                    mat = Functions.getRandomMaterial();
+
+                if(used.contains(mat)) {
+                    while (used.contains(mat)) {
+                        mat = Functions.getRandomMaterial();
+                    }
                 }
 
-                if(used.contains(mat)) return;
                 used.add(mat);
                 entityMaterials.put(e.getEntityType(), mat);
             } else {
                 mat = entityMaterials.get(e.getEntityType());
             }
 
-            e.getDrops().removeAll(e.getDrops());
-            e.getDrops().clear();
-
-
             Random random = new Random();
-            if(mat.isAir() || mat.equals(Material.AIR) || mat.toString().equalsIgnoreCase("AIR")) return;
+            if(mat == null) return;
             Functions.dropItem(new ItemStack(mat, random.nextInt(120)), e.getEntity().getLocation());
         }
 

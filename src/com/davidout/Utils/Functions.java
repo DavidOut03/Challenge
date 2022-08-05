@@ -3,6 +3,7 @@ package com.davidout.Utils;
 import com.davidout.Challenges.ChallengePlayer;
 import com.davidout.Challenges.Types.DamageCause;
 import com.davidout.Challenges.Objective;
+import com.davidout.Main;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -42,10 +43,18 @@ public class Functions {
         return new Location(w, x, y, z);
     }
 
-    public static void choseRandomDamageCause(ChallengePlayer player) {
+    public static void choseRandomDamageCause(ChallengePlayer player, int round) {
         Random random = new Random();
         DamageCause cause = DamageCause.getCauses().get(random.nextInt(DamageCause.getCauses().size()));
-        if(cause == null) return;
+
+        while (cause.getStartingRound() < round) {
+                cause = DamageCause.getCauses().get(random.nextInt(DamageCause.getCauses().size()));
+        }
+
+        if(!(cause.getStartingRound() >= round) ) {
+            cause = DamageCause.getCauses().get(random.nextInt(DamageCause.getCauses().size()));
+        }
+
         player.setObjective(new Objective(player.getPlayer(), cause.getName()));
         player.sendMessage("&aYoure new objective is: " + cause.getDescription());
 
@@ -63,21 +72,27 @@ public class Functions {
 
     }
 
-    private static final String[] exceptions = {"AIR", "SHULKUR", "BOOTS", "HELMET", "LEGGINGS", "CHESTPLATE","MUSIC_DISC"};
     public static Material getRandomMaterial() {
-        Material[] mats = Material.values();
-        Random random = new Random();
-        Material mat = mats[random.nextInt(mats.length)];
-        if(mat.isAir() || mat.equals(Material.AIR) || mat.toString().equalsIgnoreCase("AIR")) {
-            return getRandomMaterial();
+        String[] exceptions = {"BARRIER", "AIR", "BEDROCK", "SHULKUR", "TERRACOTTA"};
+
+        ArrayList<Material> materials = new ArrayList<>();
+        for(Material mat : Material.values()) {
+            boolean containsException = false;
+
+            for(String exception: exceptions) {
+                if(!mat.toString().toUpperCase().contains(exception.toUpperCase())) continue;
+                containsException = true;
+                break;
+            }
+
+            if(containsException) continue;
+            materials.add(mat);
         }
 
-        for(String exception : exceptions) {
-            if(!mat.toString().toUpperCase().contains(exception.toUpperCase())) continue;
-                return getRandomMaterial();
-        }
-
-        return mat;
+            Random random = new Random();
+            Material mat = materials.get(random.nextInt(materials.size()));
+            if(mat == null) return null;
+            return mat;
     }
 
 

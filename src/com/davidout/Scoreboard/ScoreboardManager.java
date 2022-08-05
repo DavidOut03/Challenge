@@ -87,7 +87,7 @@ public class ScoreboardManager {
                 lines.add("&aRound &f: " + challenge.getRound());
             }
 
-            if(cp.getObjective().getObjective().equalsIgnoreCase("kill enderdragon")) {
+            if(cp.getObjective() != null && cp.getObjective().getObjective() != null && cp.getObjective().getObjective().equalsIgnoreCase("kill enderdragon")) {
                 lines.add("&aDuration: &f" + challenge.getDuration() + "s");
             } else {
                 lines.add("&aTime left: &f" + challenge.getTimeLeft() + "s");
@@ -95,7 +95,7 @@ public class ScoreboardManager {
 
 
 
-            if(cp.getObjective() != null) {
+            if(cp.getObjective() != null && cp.getObjective().getObjective() != null && !cp.getObjective().getObjective().equalsIgnoreCase("")) {
                 lines.add("   ");
                 lines.add("&aObjective: &f" + cp.getObjective().getObjective());
                 lines.add("    ");

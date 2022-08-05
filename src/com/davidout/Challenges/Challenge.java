@@ -131,7 +131,7 @@ public class Challenge {
         round++;
 
         if(getPlayingPlayers().size() == 0) {
-            stop();
+            Main.getInstance().getChallengeManager().stopChallenge(getChallengeID());
             return;
         }
 
@@ -154,7 +154,7 @@ public class Challenge {
 
         if(type.equals(ChallengeType.DEATH_SHUFFLE)) {
             for(ChallengePlayer player : getPlayingPlayers()) {
-                Functions.choseRandomDamageCause(player);
+                Functions.choseRandomDamageCause(player, getRound());
             }
         }
 
@@ -229,6 +229,17 @@ public class Challenge {
 
                 } else { //
 
+                    if(type.equals(ChallengeType.DEATH_SWAP)) {
+                        if(playingPlayers.size() > 1) {
+                            nextRound();
+                            return;
+                        }
+
+                        broadCastToAll("&cStopped the challenge because there are no players left.");
+                        Main.getInstance().getChallengeManager().stopChallenge(getChallengeID());
+                        return;
+                    }
+
                     if(playingPlayers.size() > 2) {
                         for(ChallengePlayer cp : getPlayingPlayers()) {
                             if(!cp.getObjective().isCompleted()) {
@@ -245,7 +256,7 @@ public class Challenge {
                     boolean everyoneCompleted = true;
                     if(playingPlayers.size() == 0) {
                         broadCastToAll("&cStopped the challenge because there are no players left.");
-                        stop();
+                        Main.getInstance().getChallengeManager().stopChallenge(getChallengeID());
                         return;
                     }
 
@@ -269,7 +280,7 @@ public class Challenge {
 
                     if(winner != null) {
                         broadCastToAll("&a" + winner.getPlayer().getName() + " won the challenge.");
-                        stop();
+                        Main.getInstance().getChallengeManager().stopChallenge(getChallengeID());
                         return;
                     }
 

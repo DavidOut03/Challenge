@@ -48,7 +48,10 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                if(Main.getInstance().getChallengeManager().getCurrentChallenges().isEmpty()) {
+                if(Main.getInstance().getChallengeManager().getCurrentChallenges().size() >= 1) {
+                    commandSender.sendMessage(Chat.format("&cYou first have to stop the current challenge to proceed."));
+                    return false;
+                }
                     ChallengeType type = ChallengeType.valueOf(challengetype);
 
                     if(type == null) {
@@ -57,9 +60,8 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
                     }
                     Player p = (Player) commandSender;
                     Main.getInstance().getChallengeManager().startChallenge(type, p.getWorld());
-                } else {
-                    commandSender.sendMessage(Chat.format("&cYou first have to stop the current challenge to proceed."));
-                }
+                    return true;
+
             }
         return false;
     }

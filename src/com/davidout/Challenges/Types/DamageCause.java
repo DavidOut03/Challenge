@@ -13,19 +13,22 @@ public class DamageCause {
     private final String name;
     private final String description;
     private final EntityDamageEvent.DamageCause cause;
+    private final int startingRound;
 
-    public DamageCause(String name, String description, EntityDamageEvent.DamageCause cause) {
+    public DamageCause(String name, String description, EntityDamageEvent.DamageCause cause, int startingRound) {
         this.name = name;
         this.description = description;
         this.cause = cause;
+        this.startingRound = startingRound;
     }
 
     public String getName() {return name;}
     public String getDescription() {return  description;}
     public EntityDamageEvent.DamageCause getMinecraftCause() {return cause;}
+    public int getStartingRound() {return startingRound;}
 
-    public static void registerCause(String name, String description, EntityDamageEvent.DamageCause cause) {
-        causes.put(name, new DamageCause(name, description, cause));
+    public static void registerCause(String name, String description, EntityDamageEvent.DamageCause cause, int startingRound) {
+        causes.put(name, new DamageCause(name, description, cause, startingRound));
     }
 
     public static List<DamageCause> getCauses() {
