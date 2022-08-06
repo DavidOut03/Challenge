@@ -4,6 +4,7 @@ import com.davidout.Challenges.Challenge;
 import com.davidout.Challenges.ChallengePlayer;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
+import com.davidout.Utils.Functions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -88,7 +89,7 @@ public class ScoreboardManager {
             }
 
             if(cp.getObjective() != null && cp.getObjective().getObjective() != null && cp.getObjective().getObjective().equalsIgnoreCase("kill enderdragon")) {
-                lines.add("&aDuration: &f" + challenge.getDuration() + "s");
+                lines.add("&aDuration: &f" + Functions.formatTime(challenge.getDuration()));
             } else {
                 lines.add("&aTime left: &f" + challenge.getTimeLeft() + "s");
             }

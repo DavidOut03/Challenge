@@ -3,7 +3,7 @@ package com.davidout.Challenges.Types;
 import java.util.ArrayList;
 
 public enum ChallengeType {
-    DEATH_SWAP, DEATH_SHUFFLE, BLOCK_SHUFFLE, RANDOM_ITEM, ITEM_MULTIPLIER;
+    DEATH_SWAP, DEATH_SHUFFLE, BLOCK_SHUFFLE, RANDOM_ITEM, BLOCK_FALL;
 
     public static String formatChallenge(ChallengeType type) {
         return type.toString().toLowerCase().replace("_", " ");

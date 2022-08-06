@@ -43,7 +43,7 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
             if(cmd.equalsIgnoreCase("start")) {
                 if(!(commandSender instanceof Player)) return false;
 
-                if(Bukkit.getOnlinePlayers().size() < 2 && !challengetype.equalsIgnoreCase(ChallengeType.RANDOM_ITEM.name())) {
+                if(Bukkit.getOnlinePlayers().size() < 2 && !challengetype.equalsIgnoreCase(ChallengeType.RANDOM_ITEM.name()) && !challengetype.equalsIgnoreCase(ChallengeType.BLOCK_FALL.name())) {
                     commandSender.sendMessage(Chat.format("&cYou need more players before you can start a challenge."));
                     return false;
                 }

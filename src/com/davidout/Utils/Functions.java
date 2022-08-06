@@ -14,10 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Array;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class Functions {
 
@@ -33,7 +30,7 @@ public class Functions {
             Block underneathLocation = w.getBlockAt(x, i -1, z);
 
             if(!aboveLocation.getType().isAir()) continue;
-            if(!underneathLocation.getType().isBlock()) continue;
+            if(!underneathLocation.getType().isBlock() || underneathLocation.isLiquid()) continue;
             y = i;
         }
 
@@ -181,4 +178,45 @@ public class Functions {
         return wName.equalsIgnoreCase(w2Name);
     }
 
+    public static ArrayList<Location> getBlockSphere(Location centerblock, int radius, boolean hollow) {
+        ArrayList<Location> circleBlocks = new ArrayList();
+        int bx = centerblock.getBlockX();
+        int by = centerblock.getBlockY();
+        int bz = centerblock.getBlockZ();
+
+        for (int x = bx - radius; x <= bx + radius; x++) {
+            for (int y = by - radius; y <= by + radius; y++) {
+                for (int z = bz - radius; z <= bz + radius; z++) {
+                    double distance = ((bx - x) * (bx - x) + ((bz - z) * (bz - z)) + ((by - y) * (by - y)));
+                    if (distance < radius * radius && !(hollow && distance < ((radius - 1) * (radius - 1)))) {
+                        Location loc = new Location(centerblock.getWorld(), x, y, z);
+                        circleBlocks.add(loc);
+                    }
+                }
+            }
+        }
+
+        return circleBlocks;
+    }
+
+    public static String formatTime(int seconds) {
+
+        int sec = seconds % 60;
+        int min = (seconds / 60)%60;
+        int hours = (seconds/60)/60;
+
+        String strSec=(sec<10)?"0"+Integer.toString(sec):Integer.toString(sec);
+        String strmin=(min<10)?"0"+Integer.toString(min):Integer.toString(min);
+        String strHours=(hours<10)?"0"+Integer.toString(hours):Integer.toString(hours);
+
+        if(strmin.equalsIgnoreCase("00")) {
+            return seconds + "s";
+        }
+
+        if(strHours.equalsIgnoreCase("00")){
+            return strmin + ":" + strSec;
+        }
+
+        return strHours + ":" + strmin + ":" + strSec;
+    }
 }

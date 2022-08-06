@@ -1,5 +1,6 @@
 package com.davidout.Challenges;
 
+import com.davidout.Challenges.Types.ChallengeStatus;
 import com.davidout.Challenges.Types.ChallengeType;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
@@ -11,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
 public class Challenge {
@@ -83,7 +83,7 @@ public class Challenge {
 
                 if(time <= 0) {
                     cancel();
-                    if(type.equals(ChallengeType.RANDOM_ITEM)) return;
+                    if(type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.BLOCK_FALL)) return;
                     nextRound();
                     return;
                 }
@@ -120,8 +120,15 @@ public class Challenge {
             broadCastToPlayers("&aThe challenge is to stand on a block within 5 minutes or else you will be eliminated.");
         }
 
-        if(type.equals(ChallengeType.RANDOM_ITEM)) {
-            broadCastToPlayers("&aThe challenge is to kill the ender dragon but every block and mob drops a random item and with a random amount.");
+        if(type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.BLOCK_FALL)) {
+            if(type.equals(ChallengeType.RANDOM_ITEM)) {
+                broadCastToPlayers("&aThe challenge is to kill the ender dragon but every block and mob drops a random item and with a random amount.");
+            }
+
+            if(type.equals(ChallengeType.BLOCK_FALL)) {
+                broadCastToPlayers("&aThe challenge is to kill the ender dragon but every block wich has no block under it falls down.");
+            }
+
 
             for(ChallengePlayer cp : getPlayingPlayers()) {
                 cp.setObjective(new Objective(cp.getPlayer(), "Kill Enderdragon"));
@@ -143,10 +150,10 @@ public class Challenge {
 
                         for(ChallengePlayer cp : getPlayingPlayers()) {
                             if(cp.getPlayer().getWorld().getEntities().isEmpty() || cp.getPlayer().getWorld().getEntities().size() <= 40) continue;
+                            cp.sendMessage(Chat.format("&cRemoved all dropped items in the world to decrease lag."));
                             cp.getPlayer().getWorld().getEntities().forEach(entity -> {
                                 if(!entity.getType().equals(EntityType.DROPPED_ITEM)) return;
                                 entity.remove();
-                                cp.sendMessage(Chat.format("&cRemoved all dropped items in the world to decrease lag."));
                             });
                         }
                     }

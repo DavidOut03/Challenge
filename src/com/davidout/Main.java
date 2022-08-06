@@ -1,10 +1,7 @@
 package com.davidout;
 
 import com.davidout.Challenges.*;
-import com.davidout.Challenges.Events.ChallengeEvents;
-import com.davidout.Challenges.Events.ChallengePlayerDamageEvent;
-import com.davidout.Challenges.Events.ChallengePlayerDeathEvent;
-import com.davidout.Challenges.Events.ObjectiveCompleteEvent;
+import com.davidout.Challenges.Events.*;
 import com.davidout.Challenges.Types.DamageCause;
 import com.davidout.Scoreboard.ScoreboardManager;
 import com.davidout.Utils.Chat;
@@ -57,7 +54,13 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new ObjectiveCompleteEvent(), this);
         pm.registerEvents(new ChallengePlayerDamageEvent(), this);
         pm.registerEvents(new ChallengePlayerDeathEvent(), this);
+
+        // challenges
+        pm.registerEvents(new BlockFall(), this);
+        pm.registerEvents(new BlockShuffle(), this);
+        pm.registerEvents(new RandomItem(), this);
     }
+
 
     public void registerDamageCauses() {
 
