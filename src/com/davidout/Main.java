@@ -1,8 +1,9 @@
 package com.davidout;
 
-import com.davidout.Challenges.*;
-import com.davidout.Challenges.Events.*;
-import com.davidout.Challenges.Types.DamageCause;
+import com.davidout.ChallengeAPI.*;
+import com.davidout.ChallengeAPI.Challenges.*;
+import com.davidout.ChallengeAPI.Events.*;
+import com.davidout.ChallengeAPI.Types.DamageCause;
 import com.davidout.Scoreboard.ScoreboardManager;
 import com.davidout.Utils.Chat;
 import org.bukkit.Bukkit;
@@ -13,7 +14,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.security.PublicKey;
 import java.util.ArrayList;
 
 public class Main extends JavaPlugin {
@@ -33,6 +33,7 @@ public class Main extends JavaPlugin {
         registerDamageCauses();
         registerEvents();
         registerCommands();
+        registerChallenges();
 
         saveBlocks();
     }
@@ -55,7 +56,15 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new ChallengePlayerDamageEvent(), this);
         pm.registerEvents(new ChallengePlayerDeathEvent(), this);
 
+
+    }
+
+    public void registerChallenges() {
+        PluginManager pm = Bukkit.getPluginManager();
+
         // challenges
+        pm.registerEvents(new DeathShuffle(), this);
+        pm.registerEvents(new DeathSwap(), this);
         pm.registerEvents(new BlockFall(), this);
         pm.registerEvents(new BlockShuffle(), this);
         pm.registerEvents(new RandomItem(), this);
@@ -69,7 +78,7 @@ public class Main extends JavaPlugin {
         DamageCause.registerCause("Piglin", "Get youreself killed by a Piglin.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 3);
         DamageCause.registerCause("Bee", "Get youreself killed by a Bee.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
         DamageCause.registerCause("Spider", "Get youreself killed by a Spider.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
-        DamageCause.registerCause("Pillager", "Get youreself killed by a Pillager.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
+//        DamageCause.registerCause("Pillager", "Get youreself killed by a Pillager.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
         DamageCause.registerCause("Blaze", "Get youreself killed by a Blaze.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 3);
         DamageCause.registerCause("Iron Golem", "Get youreself killed by an Iron Golem.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1);
         DamageCause.registerCause("Wither Skeleton", "Get youreself killed by a Wither Skeleton.", EntityDamageEvent.DamageCause.ENTITY_ATTACK, 3);
@@ -108,7 +117,9 @@ public class Main extends JavaPlugin {
         // filters
         String[] exceptions = {"WALL", "TERRACOTTA", "STAIRS", "ENDER_CHEST", "PURPUR", "CHORUS", "SPONGE", "COPPER", "EMERALD", "AMETHYST", "SLIME", "HONEY",
                                "SHULKUR", "MOSSY_STONE_BRICK", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "BANNER", "END", "BOX", "MUSHROOM",
-                                "MYCEL", "SIGN", "COMMAND", "STRUCTURE_BLOCK", "CORAL", "KELP", "BURNING"};
+                                "MYCEL", "SIGN", "COMMAND", "STRUCTURE_BLOCK", "CORAL", "KELP", "BURNING", "MANGROVE", "CANDLE", "TULIP", "FLOWER", "EGG", "JIGSAW",
+                                "ROSE", "FUNGUS", "HEAD", "FARMLAND", "PRISMARINE", "SAPLING", "FROG", "PETRIFIED", "ROOTS", "NETHERITE", "FENCE", "SKULK", "CHIPPED",
+                                "DAMAGED", "VINES", "BUSH", "CARROTS", "POTTED", "STEM", "RESPAWN_ANCHOR", "AIR", "PANE", "GLOW_LICHEN"};
 
 
         ArrayList<String> blocks = new ArrayList<>();

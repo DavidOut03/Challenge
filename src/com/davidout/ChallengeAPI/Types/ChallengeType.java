@@ -1,9 +1,9 @@
-package com.davidout.Challenges.Types;
+package com.davidout.ChallengeAPI.Types;
 
 import java.util.ArrayList;
 
 public enum ChallengeType {
-    DEATH_SWAP, DEATH_SHUFFLE, BLOCK_SHUFFLE, RANDOM_ITEM, BLOCK_FALL;
+    DEATH_SWAP, DEATH_SHUFFLE, BLOCK_SHUFFLE, BLOCK_FALL, RANDOM_ITEM;
 
     public static String formatChallenge(ChallengeType type) {
         return type.toString().toLowerCase().replace("_", " ");

@@ -1,9 +1,9 @@
-package com.davidout.Challenges.Events;
+package com.davidout.ChallengeAPI.Events;
 
-import com.davidout.Challenges.Challenge;
-import com.davidout.Challenges.ChallengePlayer;
-import com.davidout.Challenges.Types.ChallengeType;
-import com.davidout.Challenges.Types.DamageCause;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Types.ChallengeType;
+import com.davidout.ChallengeAPI.Types.DamageCause;
 import com.davidout.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -76,23 +76,6 @@ public class ChallengePlayerDeathEvent extends Event implements Cancellable, Lis
             e.getPlayer().teleport(challenge.getSpawnPoint());
         } else {
             e.getPlayer().teleport(e.getPlayer().getBedSpawnLocation());
-        }
-
-
-        challenge.broadCastToAll("&c" + e.getPlayer().getName() + " died.");
-
-        if(challenge.getChallengeType().equals(ChallengeType.DEATH_SHUFFLE)) {
-            if(e.getChallengePlayer().getObjective() == null || e.getChallengePlayer().getObjective().getObjective() == null || e.getChallengePlayer().getObjective().getObjective().equalsIgnoreCase("")) return;
-            if(e.getDamageCause() == null || e.getDamageCause().getName() == null) return;
-            if(!e.getChallengePlayer().getObjective().getObjective().equalsIgnoreCase(e.getDamageCause().getName())) return;
-            e.getChallengePlayer().getObjective().setCompleted(true);
-            Bukkit.getPluginManager().callEvent(new ObjectiveCompleteEvent(e.getChallengePlayer(), e.getChallengePlayer().getObjective()));
-            return;
-        }
-
-        if(challenge.getChallengeType().equals(ChallengeType.DEATH_SWAP)) {
-            e.getChallengePlayer().getObjective().setCompleted(false);
-            e.getChallengePlayer().toggleSpectating();
         }
     }
 

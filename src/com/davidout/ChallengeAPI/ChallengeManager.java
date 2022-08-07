@@ -1,9 +1,8 @@
-package com.davidout.Challenges;
+package com.davidout.ChallengeAPI;
 
-import com.davidout.Challenges.Types.ChallengeType;
+import com.davidout.ChallengeAPI.Types.ChallengeType;
 import com.davidout.Utils.Chat;
 import com.davidout.Utils.Functions;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -57,12 +56,10 @@ public class ChallengeManager {
         challenge.addPlayer(p);
     }
 
-    public void removePlayer(Player p, UUID challengeID) {
+    public void removePlayerFromChallenge(Player p, UUID challengeID) {
         Challenge challenge = getChallenge(challengeID);
         if(challenge == null) return;
-
         challenge.removePlayer(p);
-        players.remove(p.getUniqueId(), getChallengePlayer(p.getUniqueId()));
     }
 
     public void removePlayer(ChallengePlayer p) {

@@ -1,9 +1,9 @@
-package com.davidout.Challenges.Events;
+package com.davidout.ChallengeAPI.Events;
 
-import com.davidout.Challenges.Challenge;
-import com.davidout.Challenges.ChallengePlayer;
-import com.davidout.Challenges.Types.ChallengeType;
-import com.davidout.Challenges.Types.DamageCause;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Types.ChallengeType;
+import com.davidout.ChallengeAPI.Types.DamageCause;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import org.bukkit.Bukkit;

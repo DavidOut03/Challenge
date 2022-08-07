@@ -1,4 +1,4 @@
-package com.davidout.Challenges.Types;
+package com.davidout.ChallengeAPI.Types;
 
 import org.bukkit.event.entity.EntityDamageEvent;
 

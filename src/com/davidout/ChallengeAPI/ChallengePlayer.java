@@ -1,5 +1,6 @@
-package com.davidout.Challenges;
+package com.davidout.ChallengeAPI;
 
+import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -21,15 +22,15 @@ public class ChallengePlayer {
 
     private boolean isSpectating;
     public boolean isSpectator() {return isSpectating;}
-    public void toggleSpectating() {
+    public void toggleSpectating(boolean toSpectator) {
         if(this.p == null) return;
 
-        isSpectating = !isSpectating;
-        if(p.getGameMode().equals(GameMode.SPECTATOR)) {
-            p.setGameMode(GameMode.SURVIVAL);
+        if(toSpectator) {
+            p.setGameMode(GameMode.SPECTATOR);
             return;
         }
-        p.setGameMode(GameMode.SPECTATOR);
+
+        p.setGameMode(GameMode.SURVIVAL);
     }
 
 

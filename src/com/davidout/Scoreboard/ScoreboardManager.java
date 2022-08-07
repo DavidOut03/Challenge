@@ -1,7 +1,7 @@
 package com.davidout.Scoreboard;
 
-import com.davidout.Challenges.Challenge;
-import com.davidout.Challenges.ChallengePlayer;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import com.davidout.Utils.Functions;
@@ -13,7 +13,6 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ScoreboardManager {
 
@@ -91,12 +90,12 @@ public class ScoreboardManager {
             if(cp.getObjective() != null && cp.getObjective().getObjective() != null && cp.getObjective().getObjective().equalsIgnoreCase("kill enderdragon")) {
                 lines.add("&aDuration: &f" + Functions.formatTime(challenge.getDuration()));
             } else {
-                lines.add("&aTime left: &f" + challenge.getTimeLeft() + "s");
+                lines.add("&aTime left: &f" + Functions.formatTime(challenge.getTimeLeft()));
             }
 
 
 
-            if(cp.getObjective() != null && cp.getObjective().getObjective() != null && !cp.getObjective().getObjective().equalsIgnoreCase("")) {
+            if(cp.getObjective() != null && cp.getObjective().getObjective() != null ) {
                 lines.add("   ");
                 lines.add("&aObjective: &f" + cp.getObjective().getObjective());
                 lines.add("    ");

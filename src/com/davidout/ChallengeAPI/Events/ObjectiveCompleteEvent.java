@@ -1,11 +1,9 @@
-package com.davidout.Challenges.Events;
+package com.davidout.ChallengeAPI.Events;
 
-import com.davidout.Challenges.Challenge;
-import com.davidout.Challenges.ChallengePlayer;
-import com.davidout.Challenges.Objective;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Objective;
 import com.davidout.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 
 public class ObjectiveCompleteEvent extends Event implements Cancellable, Listener {
@@ -69,13 +67,8 @@ public class ObjectiveCompleteEvent extends Event implements Cancellable, Listen
                 challenge.broadCastToAll("&aEvery player finished their objective, so next round is starting.");
                 challenge.nextRound();
             } else {
-                if(count == 0) {
-                    challenge.broadCastToAll("&a 1 player still has to complete there objective.");
-                    return;
-                }
-                challenge.broadCastToAll("&a" + count + " players still have to complete there objective.");
+                challenge.broadCastToAll("&a 1 player still has to complete there objective.");
             }
-
     }
 
 

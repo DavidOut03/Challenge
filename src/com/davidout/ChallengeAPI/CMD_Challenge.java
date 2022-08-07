@@ -1,6 +1,6 @@
-package com.davidout.Challenges;
+package com.davidout.ChallengeAPI;
 
-import com.davidout.Challenges.Types.ChallengeType;
+import com.davidout.ChallengeAPI.Types.ChallengeType;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import org.bukkit.Bukkit;
@@ -28,7 +28,10 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
 
         if(args.length != 2) {
             if(args.length > 0 && args[0].equalsIgnoreCase("stop")) {
-                Main.getInstance().getChallengeManager().getCurrentChallenges().stream().findFirst().get().stop();
+                if(Main.getInstance().getChallengeManager().getCurrentChallenges().stream().findFirst().isPresent()) {
+                    Challenge challenge = Main.getInstance().getChallengeManager().getCurrentChallenges().stream().findFirst().get();
+                    Main.getInstance().getChallengeManager().stopChallenge(challenge.getChallengeID());
+                }
                 return true;
             }
 

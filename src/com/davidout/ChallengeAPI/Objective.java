@@ -1,4 +1,4 @@
-package com.davidout.Challenges;
+package com.davidout.ChallengeAPI;
 
 import org.bukkit.entity.Player;
 

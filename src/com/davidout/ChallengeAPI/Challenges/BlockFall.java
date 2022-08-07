@@ -1,13 +1,12 @@
-package com.davidout.Challenges.Events;
+package com.davidout.ChallengeAPI.Challenges;
 
-import com.davidout.Challenges.Challenge;
-import com.davidout.Challenges.ChallengePlayer;
-import com.davidout.Challenges.Types.ChallengeType;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Objective;
+import com.davidout.ChallengeAPI.Types.ChallengeType;
 import com.davidout.Main;
 import com.davidout.Utils.Functions;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.FallingBlock;
@@ -19,11 +18,30 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
 
-public class BlockFall implements Listener {
+public class BlockFall extends ExampleChallenge implements Listener {
+
+    public void start(Challenge challenge) {
+        challenge.broadCastToPlayers("&aThe challenge is to kill the ender dragon but every block wich has no block under it falls down.");
+
+        if(challenge.getPlayingPlayers().isEmpty()) return;
+        for(ChallengePlayer cp : challenge.getPlayingPlayers()) {
+            cp.setObjective(new Objective(cp.getPlayer(), "Kill Enderdragon"));
+        }
+
+        World end = Bukkit.getWorld(challenge.getWorld().getName() + "_the_end");
+        if(end == null) return;
+        end.getEnderDragonBattle().initiateRespawn();
+    }
+    public void nextRound(Challenge challenge) {}
+
+
+
+
+
+    // block falling challenge
 
     private int radius = 8;
 
-    // block falling challenge
     @EventHandler
     public void onMover(PlayerMoveEvent e) {
         if(e.getTo() == null || e.getPlayer() == null) return;

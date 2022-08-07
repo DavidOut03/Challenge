@@ -1,8 +1,9 @@
 package com.davidout.Utils;
 
-import com.davidout.Challenges.ChallengePlayer;
-import com.davidout.Challenges.Types.DamageCause;
-import com.davidout.Challenges.Objective;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Types.DamageCause;
+import com.davidout.ChallengeAPI.Objective;
 import com.davidout.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,18 +11,19 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.lang.reflect.Array;
-import java.security.PublicKey;
 import java.util.*;
 
 public class Functions {
 
     public static Location getRandomLocation(World w) {
         Random random = new Random();
-        int x = (int) (random.nextFloat() * (28000000 - -28000000) + -28000000);
-        int z = (int) (random.nextFloat() * (28000000 - -28000000) + -28000000);
+        int x = (int) (random.nextFloat() * (10000 - -10000) + -10000);
+        int z = (int) (random.nextFloat() * (10000 - -10000) + -10000);
         int y = 256;
 
         for(int i = y; i > 50; i--) {
@@ -30,8 +32,10 @@ public class Functions {
             Block underneathLocation = w.getBlockAt(x, i -1, z);
 
             if(!aboveLocation.getType().isAir()) continue;
-            if(!underneathLocation.getType().isBlock() || underneathLocation.isLiquid()) continue;
+            if(!currentLocation.getType().isAir() || currentLocation.isLiquid()) continue;
+            if(underneathLocation.isEmpty() || !underneathLocation.getType().isSolid() || !underneathLocation.getType().isBlock()) continue;
             y = i;
+            break;
         }
 
         if(y == 256) {
@@ -44,20 +48,25 @@ public class Functions {
 
     public static void choseRandomDamageCause(ChallengePlayer player, int round) {
         Random random = new Random();
-        DamageCause cause = DamageCause.getCauses().get(random.nextInt(DamageCause.getCauses().size()));
-
-        while (cause.getStartingRound() < round) {
-                cause = DamageCause.getCauses().get(random.nextInt(DamageCause.getCauses().size()));
+        ArrayList<DamageCause> canBeDone = new ArrayList<>();
+        for(DamageCause currentCause: DamageCause.getCauses()) {
+            if(round < currentCause.getStartingRound()) continue;
+            canBeDone.add(currentCause);
         }
 
-        if(!(cause.getStartingRound() >= round) ) {
-            cause = DamageCause.getCauses().get(random.nextInt(DamageCause.getCauses().size()));
+
+        if(canBeDone.isEmpty()) {
+            player.sendMessage("&cError while selecting a damagecause, you will automaticly go to the next round");
+            player.setObjective(new Objective(player.getPlayer(), ""));
+            player.getObjective().setCompleted(true);
+            return;
         }
 
+        DamageCause cause = canBeDone.get(random.nextInt(canBeDone.size()));
         player.setObjective(new Objective(player.getPlayer(), cause.getName()));
         player.sendMessage("&aYoure new objective is: " + cause.getDescription());
 
-        if(cause.getName().equalsIgnoreCase("Witch")) {
+        if(cause.getMinecraftCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
             player.getPlayer().getWorld().setTime(13000);
             return;
         }
@@ -67,8 +76,6 @@ public class Functions {
             player.getPlayer().getWorld().setThunderDuration(60);
             return;
         }
-
-
     }
 
     public static Material getRandomMaterial() {
@@ -95,23 +102,26 @@ public class Functions {
     }
 
     public static Material getRandomBlock(int round) {
-        String[] exceptionsForRounds = {"DISPENSER:2", "DROPPER:2",
-                                        "OBSERVER","CRYING_OBSIDIAN:3", "DEEPSLATE:3", "DIAMOND_ORE:3", "MOSSY:3",
-                                        "DIAMOND:4", "GOLD_BLOCK:4", "NETHER:4", "NYLIUM:4", "QUARTS:4", "SOIL:4", "SOUL_SAND:4", "AMETHYST:4", "SPAWNER:4",
+        String[] exceptionsForRounds = {"DISPENSER:2", "DROPPER:2", "BED:2",
+                                        "OBSERVER:3","CRYING_OBSIDIAN:3", "DEEPSLATE:3", "DIAMOND_ORE:3", "MOSSY:3" , "BED:3", "DEEPSLATE:3", "STAINED_GLASS:3", "MUD:3", "COBWEB:3", "RAIL:3", "WOOL:3",
+                                        "DIAMOND:4", "GOLD_BLOCK:4", "NETHER:4", "NYLIUM:4", "QUARTZ:4", "SOIL:4", "SOUL:4", "AMETHYST:4", "SPAWNER:4", "WARPED:4", "SHROOM:4",
                                         "ANCIENT_DEBRIS:5", "SPONGE:5", "SEA_LANTERN:5", "PRISMARINE:5",
                                         "CAKE:6",
-                                        "ENCHANTMENT_TABLE:7"};
+                                        "ENCHANTMENT_TABLE:7",
+                                        "SCULK:8"};
 
         ArrayList<Material> blocks = Main.getInstance().getBlocks();
         ArrayList<Material> filteredList = new ArrayList<>();
 
         if(blocks.isEmpty()) {
             Bukkit.getConsoleSender().sendMessage(Chat.format("&cBlock list is empty."));
+            return null;
         }
 
 
         for (Material mat : blocks) {
             for(String s : exceptionsForRounds) {
+                if(s.split(":").length < 1) continue;
                 String cm = s.split(":")[0];
                 int r = Integer.parseInt(s.split(":")[1]);
 
@@ -131,7 +141,9 @@ public class Functions {
 
 
             Random random = new Random();
-        return filteredList.get(random.nextInt(filteredList.size()));
+            Material mat =  filteredList.get(random.nextInt(filteredList.size()));
+            if(mat == null) return null;
+        return mat;
     }
 
 
@@ -152,17 +164,35 @@ public class Functions {
 
     public static void teleportPlayersRandomToEachOther(ArrayList<ChallengePlayer> players) {
         Collections.shuffle(players);
+        HashMap<UUID, Location> locationHashMap = new HashMap<>();
 
-        int count = 0;
+        for(ChallengePlayer cp : players) {
+            locationHashMap.put(cp.getPlayerUUID(), cp.getPlayer().getLocation().clone());
+        }
+
+        int count = 1;
         if(players.size() <= 1) return;
 
         for(ChallengePlayer p : players) {
-            if(players.size() == (count + 1)) {
-                p.getPlayer().teleport(players.get(0).getPlayer().getLocation());
-                continue;
+            ChallengePlayer playerToTeleportTo;
+            Location loc;
+
+            if(players.size() == count) {
+                playerToTeleportTo = players.get(0);
+            } else {
+                playerToTeleportTo = players.get(count);
             }
 
-            p.getPlayer().teleport(players.get(count + 1).getPlayer().getLocation());
+            if(playerToTeleportTo == null) continue;
+            loc = locationHashMap.get(playerToTeleportTo.getPlayerUUID());
+            if(loc == null) {
+                p.sendMessage("&cSorry but couldn't teleport you to a random player because of a fault.");
+                p.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 30, 20), true);
+                continue;
+            }
+            p.sendMessage("&aYou teleported to " + playerToTeleportTo.getPlayer().getName() + "'s last location.");
+            p.getPlayer().teleport(locationHashMap.get(playerToTeleportTo.getPlayerUUID()));
+            count++;
         }
 
     }

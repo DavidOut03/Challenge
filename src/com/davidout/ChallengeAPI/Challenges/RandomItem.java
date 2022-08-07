@@ -1,7 +1,9 @@
-package com.davidout.Challenges.Events;
+package com.davidout.ChallengeAPI.Challenges;
 
-import com.davidout.Challenges.Challenge;
-import com.davidout.Challenges.Types.ChallengeType;
+import com.davidout.ChallengeAPI.Challenge;
+import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Objective;
+import com.davidout.ChallengeAPI.Types.ChallengeType;
 import com.davidout.Main;
 import com.davidout.Utils.Functions;
 import org.bukkit.Material;
@@ -16,12 +18,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class RandomItem implements Listener {
+public class RandomItem extends ExampleChallenge implements Listener {
+
+    public void start(Challenge challenge) {
+        challenge.broadCastToPlayers("&aThe challenge is to kill the ender dragon but every block and mob drops a random item and with a random amount.");
+
+        if(challenge.getPlayingPlayers().isEmpty()) return;
+        for(ChallengePlayer cp : challenge.getPlayingPlayers()) {
+            cp.setObjective(new Objective(cp.getPlayer(), "Kill Enderdragon"));
+        }
+    }
+    public void nextRound(Challenge challenge) {}
 
     // random item events
-    static HashMap<Material, Material> blocksMaterials = new HashMap<>();
-    static HashMap<EntityType, Material> entityMaterials = new HashMap<>();
-    static ArrayList<Material> used = new ArrayList<>();
+    private static HashMap<Material, Material> blocksMaterials = new HashMap<>();
+    private static HashMap<EntityType, Material> entityMaterials = new HashMap<>();
+    private static ArrayList<Material> used = new ArrayList<>();
+
+    public static void reset() {
+        RandomItem.blocksMaterials.clear();
+        RandomItem.entityMaterials.clear();
+        RandomItem.used.clear();
+
+    }
 
     @EventHandler
     public void onBreak(BlockBreakEvent e) {

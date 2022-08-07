@@ -1,4 +1,4 @@
-package com.davidout.Challenges.Types;
+package com.davidout.ChallengeAPI.Types;
 
 public enum ChallengeStatus {
 
