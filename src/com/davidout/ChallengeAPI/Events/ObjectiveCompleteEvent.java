@@ -67,7 +67,7 @@ public class ObjectiveCompleteEvent extends Event implements Cancellable, Listen
                 challenge.broadCastToAll("&aEvery player finished their objective, so next round is starting.");
                 challenge.nextRound();
             } else {
-                challenge.broadCastToAll("&a 1 player still has to complete there objective.");
+                challenge.broadCastToAll("&a " + count + " player still has to complete there objective.");
             }
     }
 

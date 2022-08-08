@@ -28,10 +28,10 @@ public class Challenge {
     private final ArrayList<ChallengePlayer> players;
     public ArrayList<ChallengePlayer> getPlayers() {return players;}
 
-    private ArrayList<ChallengePlayer> playingPlayers;
-    public ArrayList<ChallengePlayer> getPlayingPlayers() {return players;}
+    private final ArrayList<ChallengePlayer> playingPlayers;
+    public ArrayList<ChallengePlayer> getPlayingPlayers() {return playingPlayers;}
 
-    private ArrayList<Player> spectators;
+    private final ArrayList<Player> spectators;
     public ArrayList<Player> getSpectators() {return spectators;}
 
     private ChallengeStatus status;
@@ -45,7 +45,7 @@ public class Challenge {
     private int round = 0;
     public int getRound() {return round;}
 
-    private final int roundTime = 300;
+    private final int roundTime = 600;
     private int seconds = 300;
     public int getTimeLeft() {return seconds;}
     public void updateTime(int time) {this.seconds = time;}
@@ -137,6 +137,7 @@ public class Challenge {
                 }
 
                 for(ChallengePlayer cp : getPlayingPlayers()) {
+                    if(cp == null || cp.getPlayer() == null) continue;
                     Player p = cp.getPlayer();
                     p.sendTitle(Chat.format("&a" + ChallengeType.formatChallenge(type)), Chat.format("Starting in " + value + " seconds."));
                     p.setBedSpawnLocation(getSpawnPoint());
@@ -147,15 +148,19 @@ public class Challenge {
             @Override
             public void run() {
                 for(ChallengePlayer cp : getPlayingPlayers()) {
+                    if(cp == null || cp.getPlayer() == null) continue;
                     Player p = cp.getPlayer();
 
                     p.getInventory().clear();
+                    p.setHealth(20);
+                    p.getActivePotionEffects().clear();
                     p.getInventory().addItem(new ItemStack(Material.STONE_SWORD));
                     p.getInventory().addItem(new ItemStack(Material.STONE_PICKAXE));
                     p.getInventory().addItem(new ItemStack(Material.STONE_SHOVEL));
                     p.getInventory().addItem(new ItemStack(Material.STONE_AXE));
-                    p.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 8));
+                    p.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 12));
                     p.getInventory().addItem(new ItemStack(Material.CRAFTING_TABLE));
+                    p.getInventory().addItem(new ItemStack(Material.FURNACE));
 
                 }
 
@@ -193,6 +198,7 @@ public class Challenge {
                         @Override
                         public void run() {
                             for (ChallengePlayer cp : getPlayingPlayers()) {
+                                if(cp == null || cp.getPlayer() == null) continue;
                                 if (cp.getPlayer().getWorld().getEntities().isEmpty() || cp.getPlayer().getWorld().getEntities().size() <= 40)
                                     continue;
                                 cp.sendMessage(Chat.format("&cRemoved all dropped items in the world to decrease lag."));
@@ -224,20 +230,27 @@ public class Challenge {
         broadCastToAll("&aSkipping to the next round.");
 
         for(ChallengePlayer cp : this.getPlayingPlayers()) {
+            if(cp == null || cp.getPlayer() == null) continue;
             if(cp.getObjective() == null || cp.completedTheTask()) continue;
             Bukkit.getPluginManager().callEvent(new ObjectiveCompleteEvent(cp, cp.getObjective()));
         }
+
+        nextRound();
+    }
+
+    public void updateRound() {
+        round = round + 1;
     }
 
     public void nextRound() {
-        round++;
+        updateRound();
         if(task != null) {
             task.stopCounter();
         }
 
         int timeForRound;
         if(round == 1) {
-            timeForRound = roundTime * 2;
+            timeForRound = 750;
         } else {
             timeForRound = roundTime;
         }
@@ -319,13 +332,14 @@ public class Challenge {
                     broadCastToAll("&cStarted a new round because no one completed the objective.");
                     return;
                 }
-                eliminatePlayers();
 
                 if(getPlayingPlayers().isEmpty()) {
                     broadCastToAll("&cStopped the challenge because there are no players left.");
                     Main.getInstance().getChallengeManager().stopChallenge(getChallengeID());
                     return;
                 }
+
+                eliminatePlayers();
 
                 if(isWinner()) {
                     broadCastToAll("&a" + getWinner().getPlayer().getName() + " won the challenge.");
@@ -352,20 +366,25 @@ public class Challenge {
 
         if(!getPlayers().isEmpty()) {
             for(ChallengePlayer p : getPlayers()) {
+                if(p == null || p.getPlayer() == null) continue;
                 p.getPlayer().teleport(getWorld().getSpawnLocation());
                 p.getPlayer().getInventory().clear();
                 p.getPlayer().setLevel(0);
+                p.getPlayer().setGameMode(GameMode.SURVIVAL);
+                p.getPlayer().setFoodLevel(20);
 
                 Main.getInstance().getChallengeManager().removePlayer(p);
                 removePlayer(p.getPlayer());
             }
         }
+
     }
 
     public void broadCastToPlayers(String message) {
         if(getPlayingPlayers().isEmpty()) return;
 
         for(ChallengePlayer p : getPlayingPlayers()) {
+            if(p == null || p.getPlayer() == null) continue;
             p.sendMessage(Chat.format(message));
         }
     }
@@ -373,6 +392,7 @@ public class Challenge {
     public void broadCastToAll(String message) {
         if(!getPlayers().isEmpty())  {
             for(ChallengePlayer p : getPlayers()) {
+                if(p == null || p.getPlayer() == null) continue;
                 p.sendMessage(Chat.format(message));
             }
         }
@@ -389,6 +409,7 @@ public class Challenge {
         ChallengePlayer winner;
         ArrayList<ChallengePlayer> completedTheTask = new ArrayList<>();
         for(ChallengePlayer cp : getPlayingPlayers()) {
+            if(cp == null || cp.getPlayer() == null) continue;
             if(cp.getObjective() == null || cp.getObjective().getObjective() == null || cp.getObjective().getObjective().equalsIgnoreCase("")) {
                 completedTheTask.add(cp);
                 continue;
@@ -426,7 +447,9 @@ public class Challenge {
     public void eliminatePlayers() {
         if(getPlayingPlayers().isEmpty()) return;
         for(ChallengePlayer cp : getPlayingPlayers()) {
+            if(cp == null || cp.getPlayer() == null) continue;
             if(cp.completedTheTask()) continue;
+            players.add(cp);
             playingPlayers.remove(cp);
             spectators.add(cp.getPlayer());
             cp.toggleSpectating(true);
@@ -438,12 +461,37 @@ public class Challenge {
         if(getPlayingPlayers().isEmpty()) return false;
         boolean completed = false;
         for(ChallengePlayer cp : getPlayingPlayers()) {
+            if(cp == null || cp.getPlayer() == null) continue;
             if(!cp.completedTheTask())  continue;
             completed = true;
             break;
         }
 
         return completed;
+    }
+
+    public ArrayList<ChallengePlayer> playerWhoCompleted() {
+        ArrayList<ChallengePlayer> playersWhoCompleted = new ArrayList<>();
+        if(getPlayingPlayers().isEmpty()) return new ArrayList<>();
+        for(ChallengePlayer cp : getPlayingPlayers()) {
+            if(cp == null || cp.getPlayer() == null || cp.getObjective() == null) continue;
+            if(!cp.completedTheTask())  continue;
+            playersWhoCompleted.add(cp);
+        }
+
+        return playersWhoCompleted;
+    }
+
+    public ArrayList<ChallengePlayer> playersWhoDidNotComplete() {
+        ArrayList<ChallengePlayer> playersWhoCompleted = new ArrayList<>();
+        if(getPlayingPlayers().isEmpty()) return new ArrayList<>();
+        for(ChallengePlayer cp : getPlayingPlayers()) {
+            if(cp == null || cp.getPlayer() == null || cp.getObjective() == null) continue;
+            if(cp.completedTheTask())  continue;
+            playersWhoCompleted.add(cp);
+        }
+
+        return playersWhoCompleted;
     }
 
 

@@ -96,7 +96,7 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
         ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId());
 
         // Disable damage if player is killed.
-        if(e.getDamage() >= p.getHealth()) {
+        if(e.getFinalDamage() >= p.getHealth()) {
             e.setCancelled(true);
         }
 
@@ -105,7 +105,7 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
         if(e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) return;
         if(e.getCause().equals(EntityDamageEvent.DamageCause.MAGIC)) return;
 
-        Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getCauseByMinecraftCause(e.getCause()), e.getDamage()));
+        Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getCauseByMinecraftCause(e.getCause()), e.getFinalDamage()));
     }
 
     @EventHandler
@@ -123,73 +123,74 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
             e.setCancelled(true);
             Player dm = (Player) damager;
             dm.sendMessage(Chat.format("&cYou can't damage other players in death swap."));
+            return;
         }
 
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
             if(damager.getType().equals(EntityType.ZOMBIE)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Zombie"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Zombie"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.PIGLIN)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Piglin"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Piglin"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.BEE)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Bee"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Bee"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.SPIDER) || damager.getType().equals(EntityType.CAVE_SPIDER)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Spider"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Spider"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.PILLAGER)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Pilliger"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Pilliger"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.BLAZE)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Blaze"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Blaze"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.IRON_GOLEM)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Iron Golem"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Iron Golem"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.WITHER_SKELETON)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Wither Skeleton"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Wither Skeleton"), e.getFinalDamage(), damager));
                 return;
             }
         }
 
         if(e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Bed"), e.getDamage(), damager));
+            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Bed"), e.getFinalDamage(), damager));
             return;
         }
 
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             if(damager.getType().equals(EntityType.CREEPER)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Creeper"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Creeper"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.PRIMED_TNT) || damager.getType().equals(EntityType.MINECART_TNT) || damager.getType().equals(EntityType.ENDER_CRYSTAL)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Explosion"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Explosion"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.SMALL_FIREBALL) ) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Blaze"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Blaze"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.FIREBALL)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Ghast"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Ghast"), e.getFinalDamage(), damager));
                 return;
             }
 
@@ -200,28 +201,30 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
             if(damager instanceof Arrow) {
                 Arrow arrow = (Arrow) damager;
                 if(arrow.getShooter() == null) return;
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Skeleton"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Skeleton"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.SMALL_FIREBALL) ) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Blaze"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Blaze"), e.getFinalDamage(), damager));
                 return;
             }
 
             if(damager.getType().equals(EntityType.FIREBALL)) {
-                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Ghast"), e.getDamage(), damager));
+                Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Ghast"), e.getFinalDamage(), damager));
                 return;
             }
+
+            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Projectile"), e.getFinalDamage(), damager));
         }
 
         if(damager instanceof Firework) {
-            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Firework"), e.getDamage(), damager));
+            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Firework"), e.getFinalDamage(), damager));
             return;
         }
 
         if(e.getCause().equals(EntityDamageEvent.DamageCause.MAGIC) || e.getCause().equals(EntityDamageEvent.DamageCause.POISON)) {
-            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Witch"), e.getDamage(), damager));
+            Bukkit.getPluginManager().callEvent(new ChallengePlayerDamageEvent(cp, DamageCause.getByName("Witch"), e.getFinalDamage(), damager));
             return;
         }
     }

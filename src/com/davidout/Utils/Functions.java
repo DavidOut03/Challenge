@@ -125,10 +125,7 @@ public class Functions {
                 String cm = s.split(":")[0];
                 int r = Integer.parseInt(s.split(":")[1]);
 
-                if(mat.toString().toUpperCase().contains(cm.toUpperCase()) && r > round) {
-//                    Bukkit.getConsoleSender().sendMessage(Chat.format("&cCurrent block is not allowed for round. Block: " + mat.toString() + " currentRound: " + round + " keyWord: " + cm + " minRound: " + r + "."));
-                    continue;
-                }
+                if(mat.toString().toUpperCase().contains(cm.toUpperCase()) && round < r) continue;
                 filteredList.add(mat);
             }
         }

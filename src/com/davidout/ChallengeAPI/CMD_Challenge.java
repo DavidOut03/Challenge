@@ -35,7 +35,15 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            commandSender.sendMessage(Chat.format("&7Use: /challenge [start/stop] [challengetype]"));
+            if(args.length > 0 && args[0].equalsIgnoreCase("skipround")) {
+                if(Main.getInstance().getChallengeManager().getCurrentChallenges().stream().findFirst().isPresent()) {
+                    Challenge challenge = Main.getInstance().getChallengeManager().getCurrentChallenges().stream().findFirst().get();
+                    challenge.skipRound();
+                    return true;
+                }
+            }
+
+            commandSender.sendMessage(Chat.format("&7Use: /challenge [start/stop/skipround] [challengetype]"));
             return false;
         }
 
@@ -69,7 +77,7 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
         return false;
     }
 
-    private static String[] COMMANDS = { "start", "stop" };
+    private static String[] COMMANDS = { "start", "stop" ,"skipround"};
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {

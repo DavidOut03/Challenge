@@ -93,6 +93,7 @@ public class Main extends JavaPlugin {
         DamageCause.registerCause("Skeleton", "Get youreself killed by a Skeleton.", EntityDamageEvent.DamageCause.PROJECTILE, 1);
         DamageCause.registerCause("Ghast", "Get youreself killed by a fireball from a ghast.", EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, 3);
         DamageCause.registerCause("Firework", "Get youreself killed by a firework.", EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, 3);
+        DamageCause.registerCause("Projectile", "Get youreself killed by an projectile", EntityDamageEvent.DamageCause.PROJECTILE, 2);
 
         // other
         DamageCause.registerCause("Drown", "Get killed by downing.", EntityDamageEvent.DamageCause.DROWNING, 1);
@@ -119,7 +120,7 @@ public class Main extends JavaPlugin {
                                "SHULKUR", "MOSSY_STONE_BRICK", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "BANNER", "END", "BOX", "MUSHROOM",
                                 "MYCEL", "SIGN", "COMMAND", "STRUCTURE_BLOCK", "CORAL", "KELP", "BURNING", "MANGROVE", "CANDLE", "TULIP", "FLOWER", "EGG", "JIGSAW",
                                 "ROSE", "FUNGUS", "HEAD", "FARMLAND", "PRISMARINE", "SAPLING", "FROG", "PETRIFIED", "ROOTS", "NETHERITE", "FENCE", "SKULK", "CHIPPED",
-                                "DAMAGED", "VINES", "BUSH", "CARROTS", "POTTED", "STEM", "RESPAWN_ANCHOR", "AIR", "PANE", "GLOW_LICHEN"};
+                                "DAMAGED", "VINES", "BUSH", "CARROTS", "POTTED", "STEM", "RESPAWN_ANCHOR", "AIR", "PANE", "GLOW_LICHEN", "SCULK"};
 
 
         ArrayList<String> blocks = new ArrayList<>();

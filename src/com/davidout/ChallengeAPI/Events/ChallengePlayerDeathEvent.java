@@ -6,9 +6,12 @@ import com.davidout.ChallengeAPI.Types.ChallengeType;
 import com.davidout.ChallengeAPI.Types.DamageCause;
 import com.davidout.Main;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class ChallengePlayerDeathEvent extends Event implements Cancellable, Listener {
 
@@ -70,13 +73,40 @@ public class ChallengePlayerDeathEvent extends Event implements Cancellable, Lis
         if(e.getChallengePlayer() == null || e.getPlayer() == null) return;
         Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(e.getChallengePlayer().getChallengeID());
         if(challenge == null) return;
+        if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.TOTEM_OF_UNDYING) || e.getPlayer().getInventory().getItemInOffHand().equals(Material.TOTEM_OF_UNDYING)) {
+            if(e.getPlayer().getInventory().getItemInOffHand().getType().equals(Material.TOTEM_OF_UNDYING)) {
+                e.getPlayer().getInventory().getItemInOffHand().setType(Material.AIR);
+            }
+
+            if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.TOTEM_OF_UNDYING)) {
+                e.getPlayer().getInventory().getItemInMainHand().setType(Material.AIR);
+            }
+
+            e.getPlayer().setHealth(20);
+            e.getPlayer().setFoodLevel(20);
+            e.getPlayer().getActivePotionEffects().clear();
+            e.getPlayer().setLevel(0);
+            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 300, 3), false);
+            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 300, 3), false);
+            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 300, 3), false);
+            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 3), false);
+            return;
+        }
+
+
         e.getPlayer().setHealth(20);
+        e.getPlayer().setFoodLevel(20);
+        e.getPlayer().getActivePotionEffects().clear();
+        e.getPlayer().setLevel(0);
 
         if(e.getPlayer().getBedSpawnLocation() == null) {
             e.getPlayer().teleport(challenge.getSpawnPoint());
         } else {
             e.getPlayer().teleport(e.getPlayer().getBedSpawnLocation());
         }
+
+
+        challenge.broadCastToAll("&c" + e.getPlayer().getName() + " died");
     }
 
 }

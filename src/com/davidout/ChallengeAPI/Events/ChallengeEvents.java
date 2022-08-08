@@ -17,7 +17,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class ChallengeEvents implements Listener {
 
@@ -69,6 +72,19 @@ public class ChallengeEvents implements Listener {
 
 
         }
+    }
+
+    // on quit
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e) {
+        if(Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId()) == null) return;
+        ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId());
+        UUID challengeID = cp.getChallengeID();
+        if(challengeID == null) return;
+        e.setQuitMessage("");
+        Main.getInstance().getChallengeManager().getChallenge(challengeID).broadCastToAll("&c" + e.getPlayer() + " left the game.");
+        Main.getInstance().getChallengeManager().removePlayerFromChallenge(e.getPlayer(), challengeID);
     }
 
 }

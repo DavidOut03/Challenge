@@ -81,6 +81,9 @@ public class ScoreboardManager {
             lines.add(" ");
             lines.add("&aChallengetype: &f" + type);
             lines.add("&aPlayers: &f" + challenge.getPlayingPlayers().size());
+            if(!type.equalsIgnoreCase("block fall") && !type.equalsIgnoreCase("random item") && cp.getObjective() != null) {
+                lines.add("&aPlayers who completed: &f" + challenge.playerWhoCompleted().size() + "/" + challenge.getPlayingPlayers().size());
+            }
             lines.add("  ");
 
             if(challenge.getRound() > 0) {
@@ -92,7 +95,6 @@ public class ScoreboardManager {
             } else {
                 lines.add("&aTime left: &f" + Functions.formatTime(challenge.getTimeLeft()));
             }
-
 
 
             if(cp.getObjective() != null && cp.getObjective().getObjective() != null ) {
