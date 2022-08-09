@@ -62,7 +62,7 @@ public class ScoreboardManager {
             score.setScore(lines.size() -i);
         }
 
-        if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) != null) {
+        if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) != null && Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()).isSpectator()) {
             Team t = board.registerNewTeam("spectator");
             t.setColor(ChatColor.RED);
             t.setAllowFriendlyFire(false);

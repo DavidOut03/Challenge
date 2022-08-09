@@ -83,7 +83,7 @@ public class ChallengeEvents implements Listener {
         UUID challengeID = cp.getChallengeID();
         if(challengeID == null) return;
         e.setQuitMessage("");
-        Main.getInstance().getChallengeManager().getChallenge(challengeID).broadCastToAll("&c" + e.getPlayer() + " left the game.");
+        Main.getInstance().getChallengeManager().getChallenge(challengeID).broadCastToAll("&c" + e.getPlayer().getName() + " left the game.");
         Main.getInstance().getChallengeManager().removePlayerFromChallenge(e.getPlayer(), challengeID);
     }
 

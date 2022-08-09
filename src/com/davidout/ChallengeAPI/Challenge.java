@@ -150,10 +150,6 @@ public class Challenge {
                 for(ChallengePlayer cp : getPlayingPlayers()) {
                     if(cp == null || cp.getPlayer() == null) continue;
                     Player p = cp.getPlayer();
-
-                    p.getInventory().clear();
-                    p.setHealth(20);
-                    p.getActivePotionEffects().clear();
                     p.getInventory().addItem(new ItemStack(Material.STONE_SWORD));
                     p.getInventory().addItem(new ItemStack(Material.STONE_PICKAXE));
                     p.getInventory().addItem(new ItemStack(Material.STONE_SHOVEL));

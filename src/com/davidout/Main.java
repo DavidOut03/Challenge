@@ -4,6 +4,7 @@ import com.davidout.ChallengeAPI.*;
 import com.davidout.ChallengeAPI.Challenges.*;
 import com.davidout.ChallengeAPI.Events.*;
 import com.davidout.ChallengeAPI.Spectator.Items.PlayerTeleporter;
+import com.davidout.ChallengeAPI.Spectator.SpectatorItem;
 import com.davidout.ChallengeAPI.Spectator.Items.Warper;
 import com.davidout.ChallengeAPI.Spectator.SpectatorEvents;
 import com.davidout.ChallengeAPI.Types.DamageCause;
@@ -33,6 +34,7 @@ public class Main extends JavaPlugin {
         manager = new ScoreboardManager();
         challengeManager = new ChallengeManager();
 
+        registerSpectatorItems();
         registerDamageCauses();
         registerEvents();
         registerCommands();
@@ -58,10 +60,6 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new ObjectiveCompleteEvent(), this);
         pm.registerEvents(new ChallengePlayerDamageEvent(), this);
         pm.registerEvents(new ChallengePlayerDeathEvent(), this);
-
-        pm.registerEvents(new SpectatorEvents(), this);
-
-
     }
 
     public void registerChallenges() {
@@ -77,8 +75,11 @@ public class Main extends JavaPlugin {
 
     public void registerSpectatorItems() {
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new SpectatorEvents(), this);
         pm.registerEvents(new PlayerTeleporter(), this);
         pm.registerEvents(new Warper(), this);
+
+        SpectatorItem.registerItems();
     }
 
 
@@ -131,7 +132,8 @@ public class Main extends JavaPlugin {
                                "SHULKUR", "MOSSY_STONE_BRICK", "DRAGON_EGG", "ON", "BEACON", "_2", "SEA_LANTERN", "BARRIER", "BANNER", "END", "BOX", "MUSHROOM",
                                 "MYCEL", "SIGN", "COMMAND", "STRUCTURE_BLOCK", "CORAL", "KELP", "BURNING", "MANGROVE", "CANDLE", "TULIP", "FLOWER", "EGG", "JIGSAW",
                                 "ROSE", "FUNGUS", "HEAD", "FARMLAND", "PRISMARINE", "SAPLING", "FROG", "PETRIFIED", "ROOTS", "NETHERITE", "FENCE", "SKULK", "CHIPPED",
-                                "DAMAGED", "VINES", "BUSH", "CARROTS", "POTTED", "STEM", "RESPAWN_ANCHOR", "AIR", "PANE", "GLOW_LICHEN", "SCULK"};
+                                "DAMAGED", "VINES", "BUSH", "CARROTS", "POTTED", "STEM", "RESPAWN_ANCHOR", "AIR", "PANE", "GLOW_LICHEN", "SCULK", "CHISELED", "REINFORCED",
+                                "CRACKED", "FERN", "TINTED"};
 
 
         ArrayList<String> blocks = new ArrayList<>();

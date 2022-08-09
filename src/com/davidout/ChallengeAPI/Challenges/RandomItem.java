@@ -47,6 +47,13 @@ public class RandomItem extends ExampleChallenge implements Listener {
         if(Main.getInstance().getChallengeManager().getChallenge(e.getBlock().getWorld()) == null) return;
         Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(e.getBlock().getWorld());
 
+        if(Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId()) != null) {
+            ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId());
+            if(!cp.isSpectator()) return;
+            e.setCancelled(true);
+            return;
+        }
+
         if(challenge.getChallengeType().equals(ChallengeType.RANDOM_ITEM)) {
             e.setDropItems(false);
             e.getBlock().getDrops().clear();

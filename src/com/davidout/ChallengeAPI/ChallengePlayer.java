@@ -1,6 +1,7 @@
 package com.davidout.ChallengeAPI;
 
 import com.davidout.ChallengeAPI.Spectator.Items.PlayerTeleporter;
+import com.davidout.ChallengeAPI.Spectator.Items.Warper;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import org.bukkit.entity.Player;
@@ -30,23 +31,33 @@ public class ChallengePlayer {
         if(challenge == null) return;
         p.setHealth(20);
         p.setFoodLevel(20);
+        p.getInventory().clear();
         p.getActivePotionEffects().clear();
 
         if(toSpectator) {
             for(ChallengePlayer cp : challenge.getPlayers()) {
                 if(cp.getPlayer() == null) continue;
+                if(cp.isSpectator()) {
+                    cp.getPlayer().hidePlayer(Main.getInstance(), cp.getPlayer());
+                    continue;
+                }
                 p.showPlayer(Main.getInstance(), cp.getPlayer());
-                if(cp.isSpectator()) continue;
-                cp.getPlayer().hidePlayer(Main.getInstance(), p);
             }
 
             p.getInventory().setItem(0, new PlayerTeleporter().getItem());
+            p.getInventory().setItem(2, new Warper().getItem());
             p.setAllowFlight(true);
             p.setFlying(true);
             p.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 9999999, 1), true);
+
+            if(!isSpectating) {
+                sendMessage("&7Turned spectator mode &aON&7.");
+            }
+
             isSpectating = true;
             return;
         }
+
 
 
         for(ChallengePlayer cp : challenge.getPlayers()) {
@@ -55,6 +66,9 @@ public class ChallengePlayer {
 
         p.setAllowFlight(false);
         p.setFlying(false);
+        if(isSpectating) {
+            sendMessage("&7Turned spectator mode &cOFF&7.");
+        }
         isSpectating = false;
     }
 
@@ -65,6 +79,8 @@ public class ChallengePlayer {
         this.p = p;
         this.isSpectating = false;
         this.challengeID = challengeID;
+
+        toggleSpectating(false);
     }
 
 

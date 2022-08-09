@@ -2,12 +2,16 @@ package com.davidout.ChallengeAPI.Spectator.Items;
 
 import com.davidout.ChallengeAPI.Challenge;
 import com.davidout.ChallengeAPI.ChallengePlayer;
+import com.davidout.ChallengeAPI.Spectator.SpectatorItem;
 import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -41,12 +45,13 @@ public class PlayerTeleporter extends SpectatorItem implements Listener {
         if(challenge == null) return;
         Inventory inv = Bukkit.createInventory(null, 9, Chat.format("Players"));
 
-        for(ChallengePlayer currentPlayer : challenge.getPlayers()) {
-            ItemStack playerhead = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+        for(ChallengePlayer currentPlayer : challenge.getPlayingPlayers()) {
+            if(currentPlayer.getPlayer().getName().equalsIgnoreCase(p.getName())) continue;
 
+            ItemStack playerhead = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
             SkullMeta playerheadmeta = (SkullMeta) playerhead.getItemMeta();
-            playerheadmeta.setOwner(p.getName());
-            playerheadmeta.setDisplayName(p.getName());
+            playerheadmeta.setOwner(currentPlayer.getPlayer().getName());
+            playerheadmeta.setDisplayName(currentPlayer.getPlayer().getName());
 
 
             ArrayList<String> lore = new ArrayList<>();
@@ -59,5 +64,21 @@ public class PlayerTeleporter extends SpectatorItem implements Listener {
         }
 
         p.openInventory(inv);
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        if(!(e.getWhoClicked() instanceof  Player)) return;
+        if(!e.getView().getTitle().equalsIgnoreCase(Chat.format("Players"))) return;
+        if(e.getCurrentItem() == null) return;
+        if(!e.getCurrentItem().getType().equals(Material.PLAYER_HEAD) && !e.getCurrentItem().getType().toString().equalsIgnoreCase("SKULL") && e.getCurrentItem().getItemMeta() != null) return;
+        e.setCancelled(true);
+        e.getWhoClicked().closeInventory();
+        String name = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName().toLowerCase());
+        Player p = Bukkit.getPlayer(name);
+        if(p == null) return;
+        e.getWhoClicked().teleport(p);
+        e.getWhoClicked().sendMessage(Chat.format("&7Teleported to &a" + p.getName() + "&7."));
+
     }
 }
