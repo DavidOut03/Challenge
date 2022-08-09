@@ -12,6 +12,7 @@ import com.davidout.test.Pig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -30,29 +31,24 @@ public class ChallengeEvents implements Listener {
 //
 //        if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !e.getAction().equals(Action.LEFT_CLICK_BLOCK)) return;
 //        if(e.getClickedBlock() == null) return;
-//        if(!e.getClickedBlock().getType().equals(Material.BEDROCK)) return;
-//        Animal animal = new Animal();
-//        Animal cow = new Cow();
-//        Animal pig = new Pig();
 //
-//
-//        animal.makeSound();
-//        if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-//            cow.makeSound();
+//        if(e.getClickedBlock().getType().equals(Material.BEDROCK)) {
+//            ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId());
+//            if(cp == null || cp.getPlayer() == null) return;
+//            cp.toggleSpectating(true);
 //        }
 //
-//        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-//            pig.makeSound();
+//        if(e.getClickedBlock().getType().equals(Material.DIAMOND_BLOCK)) {
+//            ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId());
+//            if(cp == null || cp.getPlayer() == null) return;
+//            cp.toggleSpectating(false);
 //        }
+//
+//
 //    }
 
     @EventHandler
     public void onDeath(EntityDeathEvent e) {
-
-        if(e.getEntity().getType().equals(EntityType.ENDERMAN)) {
-            Bukkit.getConsoleSender().sendMessage(Chat.format("&dAn enderman was killed."));
-        }
-
         if(e.getEntity().getType().equals(EntityType.ENDER_DRAGON)) {
             Bukkit.getConsoleSender().sendMessage(Chat.format("&dThe enderdragon was killed."));
             Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(e.getEntity().getWorld());

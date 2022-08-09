@@ -43,6 +43,19 @@ public class CMD_Challenge implements CommandExecutor, TabCompleter {
                 }
             }
 
+            if(args.length > 0 && args[0].equalsIgnoreCase("eliminate") && commandSender instanceof  Player) {
+                Player p = (Player) commandSender;
+                ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId());
+                Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(cp.getChallengeID());
+
+                if(cp == null || cp.getPlayerUUID() == null || challenge == null) {
+                    p.sendMessage(Chat.format("&cYou are not in an event."));
+                    return false;
+                }
+
+                challenge.eliminatePlayer(p);
+            }
+
             commandSender.sendMessage(Chat.format("&7Use: /challenge [start/stop/skipround] [challengetype]"));
             return false;
         }

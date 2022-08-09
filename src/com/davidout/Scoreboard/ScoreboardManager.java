@@ -19,6 +19,8 @@ public class ScoreboardManager {
 
     public ScoreboardManager() {
         this.delay = 1;
+
+
         start();
     }
 
@@ -62,13 +64,15 @@ public class ScoreboardManager {
             score.setScore(lines.size() -i);
         }
 
+
+
         if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) != null && Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()).isSpectator()) {
-            Team t = board.registerNewTeam("spectator");
-            t.setColor(ChatColor.RED);
-            t.setAllowFriendlyFire(false);
-            t.setCanSeeFriendlyInvisibles(true);
-            t.setPrefix(Chat.format("&c&lSPECTATOR &c"));
-            t.addPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()));
+            Team spectators = board.registerNewTeam("spectators");
+            spectators.setAllowFriendlyFire(false);
+            spectators.setCanSeeFriendlyInvisibles(true);
+            spectators.setPrefix(Chat.format("&c&lSPECTATOR &c"));
+            spectators.setColor(ChatColor.RED);
+            spectators.addPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()));
         }
 
         p.setScoreboard(board);

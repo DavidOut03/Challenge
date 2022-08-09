@@ -18,7 +18,7 @@ public class Warper extends SpectatorItem implements Listener {
         int range = 5;
         Vector v = p.getEyeLocation().getDirection();
 
-       for(var i = 0; i < range; i++) {
+       for(var i = 1; i < range; i++) {
            v.multiply(i);
            Location loc = new Location(p.getWorld(), v.getBlockX(), v.getBlockY(), v.getBlockZ());
 

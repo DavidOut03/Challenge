@@ -81,18 +81,4 @@ public class SpectatorEvents implements Listener {
         e.setCancelled(true);
     }
 
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void toSpectator(PlayerInteractEvent e) {
-        if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getClickedBlock() == null) return;
-        if(e.getClickedBlock().getType() != Material.OBSIDIAN) return;
-        if(Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId()) == null) return;
-        ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(e.getPlayer().getUniqueId());
-       if(cp.isSpectator()) {
-           cp.toggleSpectating(false);
-           return;
-       }
-
-       cp.toggleSpectating(true);
-    }
 }

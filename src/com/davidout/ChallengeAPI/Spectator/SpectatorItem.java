@@ -41,11 +41,7 @@ public class SpectatorItem implements Listener {
     public void onInterackt(PlayerInteractEvent e) {
         if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && !e.getAction().equals(Action.LEFT_CLICK_BLOCK) && !e.getAction().equals(Action.LEFT_CLICK_AIR) && !e.getAction().equals(Action.RIGHT_CLICK_AIR)) return;
         if(e.getItem() == null || e.getItem().getType().equals(Material.AIR)) return;
-        if(getSpecatatorItemByMaterial(e.getItem()) == null) {
-            e.getPlayer().sendMessage(Chat.format("&cItem could not be found."));
-            return;
-        }
-
+        if(getSpecatatorItemByMaterial(e.getItem()) == null)  return;
         getSpecatatorItemByMaterial(e.getItem()).use(e.getPlayer());
     }
 }

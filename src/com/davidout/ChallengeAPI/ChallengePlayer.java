@@ -36,16 +36,17 @@ public class ChallengePlayer {
 
         if(toSpectator) {
             for(ChallengePlayer cp : challenge.getPlayers()) {
-                if(cp.getPlayer() == null) continue;
-                if(cp.isSpectator()) {
-                    cp.getPlayer().hidePlayer(Main.getInstance(), cp.getPlayer());
-                    continue;
-                }
-                p.showPlayer(Main.getInstance(), cp.getPlayer());
+                Player cpPlayer = cp.getPlayer();
+                if(cpPlayer == null || cp.isSpectator()) continue;
+                cpPlayer.hidePlayer(Main.getInstance(), p);
+            }
+
+            for(Player spectator : challenge.getSpectators()) {
+               p.showPlayer(Main.getInstance(), spectator);
             }
 
             p.getInventory().setItem(0, new PlayerTeleporter().getItem());
-            p.getInventory().setItem(2, new Warper().getItem());
+//            p.getInventory().setItem(2, new Warper().getItem());
             p.setAllowFlight(true);
             p.setFlying(true);
             p.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 9999999, 1), true);
@@ -54,14 +55,20 @@ public class ChallengePlayer {
                 sendMessage("&7Turned spectator mode &aON&7.");
             }
 
+            challenge.setToSpectator(p, true);
             isSpectating = true;
             return;
         }
 
 
-
         for(ChallengePlayer cp : challenge.getPlayers()) {
-            cp.getPlayer().showPlayer(Main.getInstance(), p);
+            Player cpPlayer = cp.getPlayer();
+            if(cpPlayer == null) continue;
+            cpPlayer.showPlayer(Main.getInstance(), p);
+        }
+
+        for(Player spectator : challenge.getSpectators()) {
+            p.hidePlayer(Main.getInstance(), spectator);
         }
 
         p.setAllowFlight(false);
@@ -69,6 +76,8 @@ public class ChallengePlayer {
         if(isSpectating) {
             sendMessage("&7Turned spectator mode &cOFF&7.");
         }
+
+        challenge.setToSpectator(p, false);
         isSpectating = false;
     }
 

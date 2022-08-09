@@ -103,12 +103,18 @@ public class Challenge {
             return;
         }
 
+        if(type.equals(ChallengeType.DEVELOPMENT)) {
+            this.ec = new ExampleChallenge();
+            return;
+        }
+
     }
 
     public void start(World world) {
         this.world = Bukkit.getWorld(world.getName().replace("_nether", "").replace("_the_end", ""));
         this.status = ChallengeStatus.STARTED;
-        this.spawnPoint = Functions.getRandomLocation(world);
+//        this.spawnPoint = Functions.getRandomLocation(world);
+        this.spawnPoint = world.getSpawnLocation();
 
         world.setDifficulty(Difficulty.HARD);
         world.setTime(1000);
@@ -169,7 +175,7 @@ public class Challenge {
                 }.runTaskTimer(Main.getInstance(), 0L, 20L);
 
 
-                if(type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.BLOCK_FALL)) {
+                if(type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.BLOCK_FALL) || type.equals(ChallengeType.DEVELOPMENT)) {
                     if(task != null) {
                         task.stopCounter();
                     }
@@ -213,7 +219,7 @@ public class Challenge {
 
 
 
-                if(type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.BLOCK_FALL)) return;
+                if(type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.BLOCK_FALL) || type.equals(ChallengeType.DEVELOPMENT)) return;
                 nextRound();
             }
         });
@@ -258,7 +264,10 @@ public class Challenge {
             return;
         }
 
+        if(type.equals(ChallengeType.BLOCK_FALL) || type.equals(ChallengeType.RANDOM_ITEM) || type.equals(ChallengeType.DEVELOPMENT)) return;
         this.ec.nextRound(this);
+
+
         this.task = new CountdownTask(timeForRound, new IntConsumer() {
             @Override
             public void accept(int value) {
@@ -440,6 +449,15 @@ public class Challenge {
         spectators.remove(cp.getPlayer());
     }
 
+    public void setToSpectator(Player p, boolean toSpectator) {
+        if(toSpectator) {
+            spectators.add(p);
+            return;
+        }
+
+        spectators.remove(p);
+    }
+
     public void eliminatePlayers() {
         if(getPlayingPlayers().isEmpty()) return;
         for(ChallengePlayer cp : getPlayingPlayers()) {
@@ -447,10 +465,19 @@ public class Challenge {
             if(cp.completedTheTask()) continue;
             players.add(cp);
             playingPlayers.remove(cp);
-            spectators.add(cp.getPlayer());
             cp.toggleSpectating(true);
             cp.sendMessage("&cYou did not complete the objective so youre eliminated from the challenge.");
         }
+    }
+
+    public void eliminatePlayer(Player p) {
+        if(getPlayingPlayers().isEmpty()) return;
+            ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId());
+            if(cp == null || cp.getPlayer() == null) return;
+            players.add(cp);
+            playingPlayers.remove(cp);
+            cp.toggleSpectating(true);
+            cp.sendMessage("&cEliminated you from the challenge.");
     }
 
     public boolean anyoneCompleted() {
