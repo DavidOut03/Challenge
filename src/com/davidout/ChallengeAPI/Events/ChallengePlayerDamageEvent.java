@@ -94,6 +94,10 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
 
         if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) == null) return;
         ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId());
+        if(cp.isSpectator()) {
+            e.setCancelled(true);
+            return;
+        }
 
         // Disable damage if player is killed.
         if(e.getFinalDamage() >= p.getHealth()) {
@@ -118,13 +122,33 @@ public class ChallengePlayerDamageEvent extends Event implements Cancellable, Li
         ChallengePlayer cp = Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId());
         if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) == null) return;
         Challenge challenge = Main.getInstance().getChallengeManager().getChallenge(cp.getChallengeID());
-
-        if(damager instanceof Player && challenge.getChallengeType().equals(ChallengeType.DEATH_SWAP)) {
+        if(cp.isSpectator())  {
             e.setCancelled(true);
-            Player dm = (Player) damager;
-            dm.sendMessage(Chat.format("&cYou can't damage other players in death swap."));
+
+            if(damager instanceof  Player) {
+                Player dm = (Player) damager;
+                dm.sendMessage(Chat.format("&cYou can't hit a spectator."));
+            }
             return;
         }
+
+        if(damager instanceof Player dm) {
+            if(Main.getInstance().getChallengeManager().getChallengePlayer(dm.getUniqueId()) != null) {
+                ChallengePlayer dmCP = Main.getInstance().getChallengeManager().getChallengePlayer(dm.getUniqueId());
+                if(!dmCP.isSpectator()) return;
+                e.setCancelled(true);
+                dmCP.sendMessage("&cYou can't damage other players while in spectator mode.");
+                return;
+            }
+
+            if(challenge.getChallengeType().equals(ChallengeType.DEATH_SWAP)) {
+                e.setCancelled(true);
+                dm.sendMessage(Chat.format("&cYou can't damage other players in death swap."));
+                return;
+            }
+        }
+
+
 
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
             if(damager.getType().equals(EntityType.ZOMBIE)) {

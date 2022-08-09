@@ -3,6 +3,9 @@ package com.davidout;
 import com.davidout.ChallengeAPI.*;
 import com.davidout.ChallengeAPI.Challenges.*;
 import com.davidout.ChallengeAPI.Events.*;
+import com.davidout.ChallengeAPI.Spectator.Items.PlayerTeleporter;
+import com.davidout.ChallengeAPI.Spectator.Items.Warper;
+import com.davidout.ChallengeAPI.Spectator.SpectatorEvents;
 import com.davidout.ChallengeAPI.Types.DamageCause;
 import com.davidout.Scoreboard.ScoreboardManager;
 import com.davidout.Utils.Chat;
@@ -56,6 +59,8 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new ChallengePlayerDamageEvent(), this);
         pm.registerEvents(new ChallengePlayerDeathEvent(), this);
 
+        pm.registerEvents(new SpectatorEvents(), this);
+
 
     }
 
@@ -68,6 +73,12 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new BlockFall(), this);
         pm.registerEvents(new BlockShuffle(), this);
         pm.registerEvents(new RandomItem(), this);
+    }
+
+    public void registerSpectatorItems() {
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new PlayerTeleporter(), this);
+        pm.registerEvents(new Warper(), this);
     }
 
 

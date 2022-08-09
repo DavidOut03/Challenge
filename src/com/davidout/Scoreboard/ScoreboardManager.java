@@ -6,11 +6,9 @@ import com.davidout.Main;
 import com.davidout.Utils.Chat;
 import com.davidout.Utils.Functions;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
 
@@ -62,6 +60,15 @@ public class ScoreboardManager {
         for(int i = 0; i < lines.size(); i++) {
             Score score = objective.getScore(Chat.format(lines.get(i)));
             score.setScore(lines.size() -i);
+        }
+
+        if(Main.getInstance().getChallengeManager().getChallengePlayer(p.getUniqueId()) != null) {
+            Team t = board.registerNewTeam("spectator");
+            t.setColor(ChatColor.RED);
+            t.setAllowFriendlyFire(false);
+            t.setCanSeeFriendlyInvisibles(true);
+            t.setPrefix(Chat.format("&c&lSPECTATOR &c"));
+            t.addPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()));
         }
 
         p.setScoreboard(board);
