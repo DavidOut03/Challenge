@@ -113,8 +113,7 @@ public class Challenge {
     public void start(World world) {
         this.world = Bukkit.getWorld(world.getName().replace("_nether", "").replace("_the_end", ""));
         this.status = ChallengeStatus.STARTED;
-//        this.spawnPoint = Functions.getRandomLocation(world);
-        this.spawnPoint = world.getSpawnLocation();
+        this.spawnPoint = Functions.getRandomLocation(world);
 
         world.setDifficulty(Difficulty.HARD);
         world.setTime(1000);
